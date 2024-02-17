@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Get next vmid
+      shell: pvesh get /cluster/nextid
+      register: next_vmid_raw
+
+    - set_fact:
+        next_vmid: "{{ next_vmid_raw.stdout | int }}"
+
+    - name: Write next vmid to file
+      copy:
+        content: "{{ next_vmid }}"
+        dest: next_vmid.txt
