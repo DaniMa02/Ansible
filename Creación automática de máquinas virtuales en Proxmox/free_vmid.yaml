@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: marisma002
   gather_facts: no
   vars:
     proxmox_api_user: "root"
