@@ -2,15 +2,15 @@
   hosts: marisma002  
   gather_facts: false
   vars:
-    proxmox_api_user: 'root'
-    proxmox_api_password: '**********'
+    proxmox_api_user: 'administrador'
+    proxmox_api_password: '12345'
     proxmox_api_host: 'localhost'
     proxmox_api_port: '8006'
     proxmox_vm_name: 'prueba1'
     proxmox_vm_node: 'marisma002'
     proxmox_vm_cores: 2
     proxmox_vm_memory: 4096
-    proxmox_vm_iso: 'NAS:iso/ubuntu-22.04.1-live-server-amd64.iso'
+    proxmox_vm_iso: '/mnt/pve/NAS/iso/ubuntu-22.04.1-desktop-amd64.iso'
     proxmox_vm_disk_size: 20G
     proxmox_vm_storage_pool: '2ASIR'
     proxmox_kvm:
