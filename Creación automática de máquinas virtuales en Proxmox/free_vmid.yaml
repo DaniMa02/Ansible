@@ -2,8 +2,8 @@
 - hosts: marisma002
   gather_facts: no
   vars:
-    proxmox_api_user: "root"
-    proxmox_api_password: "*********"
+    proxmox_api_user: "administrador"
+    proxmox_api_password: "12345"
     proxmox_api_host: "localhost"
     proxmox_api_port: "8006"
   tasks:
