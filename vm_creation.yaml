@@ -1,0 +1,21 @@
+---
+- name: Create VM
+  hosts: localhost
+  tasks:
+    -  community.general.proxmox_kvm:
+        api_user: administrador@pam
+        api_password: marisma.23
+        api_host: 10.4.0.150
+        name: prueba5
+        node: marisma002
+        cores: 4
+        memory: 4096
+        sata:
+          sata0: 'local-lvm:10,format=raw,cache=writeback'
+        net:
+          net0: 'e1000,bridge=vmbr0'
+        pool: 2ASIR
+        ide:
+          ide2: 'NAS:iso/ubuntu-22.04.1-desktop-amd64.iso,media=cdrom'
+        ostype: l26
+        scsihw: virtio-scsi-pci
