@@ -1,4 +1,5 @@
 ---
+# Para utilizar las variables definidas en "loop" usaremos el modificador --extra-vars "variable=valor1,valor2...".
 - name: Create VM
   hosts: localhost
   tasks:
@@ -6,7 +7,7 @@
         api_user: administrador@pam
         api_password: marisma.23
         api_host: 10.4.0.150
-        name: prueba5
+        name: "{{ item }}"
         node: marisma002
         cores: 4
         memory: 4096
@@ -19,3 +20,7 @@
           ide2: 'NAS:iso/ubuntu-22.04.1-desktop-amd64.iso,media=cdrom'
         ostype: l26
         scsihw: virtio-scsi-pci
+       loop: "{{ name.split(',') }}"
+
+
+
