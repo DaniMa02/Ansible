@@ -1,0 +1,23 @@
+---
+- name: Aprovisionamiento de servidor Apache2
+  hosts: hosts
+  tasks:
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+
+    - name: Instalar Apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Habilitar el módulo de Apache2 'mod_rewrite'
+      apache2_module:
+        name: rewrite
+        state: present
+
+    - name: Reiniciar Apache2 para aplicar los cambios
+      service:
+        name: apache2
+        state: restarted
+  become: yes
