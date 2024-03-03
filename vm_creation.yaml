@@ -20,7 +20,8 @@
           ide2: 'NAS:iso/ubuntu-22.04.1-desktop-amd64.iso,media=cdrom'
         ostype: l26
         scsihw: virtio-scsi-pci
-       loop: "{{ name.split(',') }}"
-
+        proxmox_default_behavior: no_defaults
+       with_items: 
+         - "{{ item.split(',') }}"
 
 
