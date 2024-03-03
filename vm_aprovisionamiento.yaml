@@ -1,6 +1,7 @@
 ---
 - name: Aprovisionamiento de servidor Apache2
-  hosts: hosts
+  hosts: webserver
+  remote_user: mintman
   tasks:
     - name: Actualizar lista de paquetes
       apt:
