@@ -1,5 +1,5 @@
 ---
-# Para utilizar las variables definidas en "loop" usaremos el modificador --extra-vars "variable=valor1,valor2...".
+
 - name: Create VM
   hosts: localhost
   tasks:
@@ -23,5 +23,3 @@
         proxmox_default_behavior: no_defaults
        with_items: 
          - "{{ item.split(',') }}"
-
-
