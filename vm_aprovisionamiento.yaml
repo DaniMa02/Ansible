@@ -1,22 +1,38 @@
 ---
+# Para poder utilizar este playbook es necesaria la instalación de los módulos openssh-client y openssh-server en el equipo maestro así como en las máquinas que serán afectadas por el siguiente playbook. Así mismo es necesario generar una clave ssh
+# en la máquina maestra y compartir dicha clave con todas las maquinas que se verán afectadas. Una vez complidos dichos requisitos se deberá actualizar el fichero "hosts" que contendrá la lista de máquinas afectadas. 
+# Tanto la generación de clave como la utilización del playbook debe hacerse sin utilizar el usuario root.
+# Para ejecutar el playbook desde el terminal se usará la siguiente instrucción: "ansible-playbook --ask-become-pass -i 'ruta/a/tu/fichero/de/hosts' 'vm_aprovisionamiento.yaml'".
+# Máquina maestra: 
+#   VMID: 320
+#   Nombre: Ansible-Daniel
+#   Contraseña: 1234
+# Máquina aprovisionada:
+#   VMID: 322
+#   Nombre: DaniAprovisionamiento
+#   Contraseña: 1234
 - name: Aprovisionamiento de servidor Apache2
+
+# Host y usuario a usar para la conexión
   hosts: webserver
   remote_user: mintman
+# Tareas
   tasks:
     - name: Actualizar lista de paquetes
+# apt update      
       apt:
         update_cache: yes
-
+# apt-get install apache2
     - name: Instalar Apache2
       apt:
         name: apache2
         state: present
-
+# a2enmod rewrite
     - name: Habilitar el módulo de Apache2 'mod_rewrite'
       apache2_module:
         name: rewrite
         state: present
-
+# systemctl restart apache2
     - name: Reiniciar Apache2 para aplicar los cambios
       service:
         name: apache2
