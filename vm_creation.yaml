@@ -1,25 +1,56 @@
 ---
-
+# Para poder utilizar el siguiente playbook es necesaria la instalación de algunos módulos que se encuentran en las librerias de linux.
+# Primero necesitaremos instalar el módulo python3-pip con la instrucción "apt-get install python3-pip".
+# Una vez tengamos instalado el módulo anterior vamos a instalar proxmoxer con la orden "pip install proxmoxer".
+# El siguiente playbook se encarga de crear máquinas en nuestro nodo de proxmox de manera automatizada. El playbook requiere la utilización del modificador "--extra-vars" en su llamada, 
+# donde especificaremos, separados por "," todos los nombres de las máquinas virtuales que deseamos crear de la siguiente manera: "ansible-playbook vm_creation.yaml --extra-vars "item='nombre1,nombre2'".
+# El ejemplo escrito arriba creará dos máquinas con los nombres "nombre1" y "nombre2" respectivamente.
+# El siguiente playbook no requiere de un fichero de hosts puesto que trabaja en localhost, es decir, en el mismo cluster en el que se encuentra independientemente del nodo en el que queramos ejecutarlo.
+# El módulo de ansible utilizado para el playbook toma automáticamente la siguiente VMID libre por lo que no es necesario utilizar un parámetro para especificarla.
+# Máquina maestra: 
+#   VMID: 320
+#   Nombre: Ansible-Daniel
+#   Contraseña: 1234
+# Máquina creada:
+#   VMID: 322
+#   Nombre: DaniAprovision
 - name: Create VM
   hosts: localhost
   tasks:
+# Aquí indicamos el módulo de ansible que vamos a utilizar, en mi caso es un variante de proxmox_kvm.
     -  community.general.proxmox_kvm:
+# A continuación especificamos el nombre@autenticación y contraseña del usuario con el que deseamos conectarnos a nuestro cluster.
         api_user: administrador@pam
         api_password: marisma.23
+# La siguiente línea especifica la IP que utilizamos para conectarnos (esta podría ser la correspondiente a cualquiera de los nodos del cluster).
         api_host: 10.4.0.150
-        name: "{{ item }}"
+# Este es el nodo del cluster sobre el que queremos ejecutar el playbook (podrían ser cualquiera de los cuatro existentes y no es necesario que la IP asignada sea la correspondiente a dicho nodo).
         node: marisma002
+# La siguiente línea asigna el nombre a la máquina virtual, en mi caso es una variable para poder utilizarla como parámetro en la llamada del playbook como se ha mencionado anteriormente.
+        name: "{{ item }}"
+# Número de núcleos que queremos asignar a las maquinas.
         cores: 4
+# Memoria RAM en MB.
         memory: 4096
+# Discos asignados:
+  # Disco del sistema.
         sata:
           sata0: 'local-lvm:10,format=raw,cache=writeback'
-        net:
-          net0: 'e1000,bridge=vmbr0'
-        pool: 2ASIR
+  # Unidad de almacenamiento (CD/ROM) desde la que se cargará la ISO que queremos instalar
         ide:
           ide2: 'NAS:iso/ubuntu-22.04.1-desktop-amd64.iso,media=cdrom'
+# Configuración de la tarjeta(s) de red
+        net:
+          net0: 'e1000,bridge=vmbr0'
+# Pool a la que pertenecerá la máquina.
+        pool: 2ASIR
+# Kernel que queremos que nuestra máquina utilice
         ostype: l26
+# Controlador SCSI
         scsihw: virtio-scsi-pci
+# Módulo de compatibilidad para proxmox que permite crear, eliminar y parar instancias. No especificar este parámetro puede ocasionar un mal funcionamiento del playbook.
         proxmox_default_behavior: no_defaults
+# Inventario de variables (en el podríamos crear todas las necesarias).
        with_items: 
+  # Variable utilizada para los nombres de las maquinas.
          - "{{ item.split(',') }}"
